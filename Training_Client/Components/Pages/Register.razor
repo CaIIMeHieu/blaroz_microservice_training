@@ -1,0 +1,75 @@
+﻿@page "/register"
+@rendermode InteractiveServer
+@layout EmptyLayout
+@using Iris_Training_Client.Components.Layout
+@using Grpc.Net.Client
+@using IrisTraining_Auth_Client
+@using MudBlazor.Utilities
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+
+<div class="register-background">
+    <MudContainer MaxWidth="MaxWidth.Small" Class="register-container">
+        <MudCard Class="pa-4 register-card">
+            <MudCardHeader>
+                <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Primary">
+                    Đăng Ký Tài Khoản
+                </MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudTextField @bind-Value="Email" Label="Email" Placeholder="Nhập email"
+                              Variant="Variant.Outlined" Required="true" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Email" />
+                <MudSpacer />
+                <MudTextField @bind-Value="Password" Label="Password" Placeholder="Nhập mật khẩu"
+                              Variant="Variant.Outlined" InputType="InputType.Password" Required="true"
+                              Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Lock" />
+            </MudCardContent>
+            <MudCardActions Align="Center">
+                <MudButton OnClick="RegisterUser" Variant="Variant.Filled" Color="Color.Secondary" Class="register-button">
+                    Đăng Ký
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudContainer>
+</div>
+
+@code {
+    private string Email { get; set; } = string.Empty;
+    private string Password { get; set; } = string.Empty;
+    private Auth.AuthClient? _client;
+
+    protected override void OnInitialized()
+    {
+        // Khởi tạo gRPC channel và client
+        var channel = GrpcChannel.ForAddress("https://localhost:7093");
+        _client = new Auth.AuthClient(channel);
+    }
+
+    private async Task RegisterUser()
+    {
+        if (_client is null)
+        {
+            Snackbar.Add("Lỗi: gRPC client chưa được khởi tạo.", Severity.Error);
+            return;
+        }
+        try {
+            var response = await _client.RegisterAsync(new RegisterRequest
+                {
+                    Email = Email,
+                    PassWord = Password
+                });
+
+            Snackbar.Add($"{response.Message}", Severity.Normal);
+            Navigation.NavigateTo("/");
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add($"{ex.Message}", Severity.Error);
+        }
+    }
+    private async Task ShowSnackbar()
+    {
+        Snackbar.Add("Đây là thông báo kiểm tra!", Severity.Success);
+    }
+
+}

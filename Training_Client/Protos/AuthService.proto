@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option csharp_namespace = "IrisTraining_Auth_Client";
+
+package Auth;
+
+service Auth {
+  rpc Register (RegisterRequest) returns (RegisterResponse);
+  rpc Login (LoginRequest) returns (LoginResponse);
+}
+
+
+message RegisterRequest {
+  string email = 1;
+  string passWord = 2;
+}
+
+message RegisterResponse {
+  string message = 1;
+}
+
+message LoginRequest {
+  string email = 1;
+  string passWord = 2;
+}
+
+
+message LoginResponse {
+  string message = 1;
+}

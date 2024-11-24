@@ -1,0 +1,32 @@
+﻿.register-background {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad390);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.register-container {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.register-card {
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.register-button {
+    background-color: #ff6f61;
+    color: white;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+    .register-button:hover {
+        background-color: #e63946;
+        transform: scale(1.05);
+    }
